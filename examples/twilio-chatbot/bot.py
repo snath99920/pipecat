@@ -16,6 +16,7 @@ from fastapi import WebSocket
 from loguru import logger
 
 from pipecat.audio.vad.silero import SileroVADAnalyzer
+from pipecat.audio.vad.vad_analyzer import VADParams
 from pipecat.pipeline.pipeline import Pipeline
 from pipecat.pipeline.runner import PipelineRunner
 from pipecat.pipeline.task import PipelineParams, PipelineTask
@@ -68,7 +69,7 @@ async def run_bot(websocket_client: WebSocket, stream_sid: str, call_sid: str, t
             audio_in_enabled=True,
             audio_out_enabled=True,
             add_wav_header=False,
-            vad_analyzer=SileroVADAnalyzer(),
+            vad_analyzer=SileroVADAnalyzer(params=VADParams(confidence=0.4, start_secs=0.2, stop_secs=0.3)),
             serializer=serializer,
         ),
     )
@@ -79,7 +80,7 @@ async def run_bot(websocket_client: WebSocket, stream_sid: str, call_sid: str, t
 
     tts = CartesiaTTSService(
         api_key=os.getenv("CARTESIA_API_KEY"),
-        voice_id="71a7ad14-091c-4e8e-a314-022ece01c121",  # British Reading Lady
+        voice_id="57c63422-d911-4666-815b-0c332e4d7d6a",  # British Reading Lady
         push_silence_after_stop=testing,
     )
 
